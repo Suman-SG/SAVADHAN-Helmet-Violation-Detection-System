@@ -1,4 +1,0 @@
-Rebuild trigger file.
-Timestamp: 2026-05-13T00:00:00Z
-
-This file was added to force a no-op commit and trigger a rebuild on Hugging Face Spaces.

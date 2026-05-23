@@ -24,6 +24,9 @@ benchmark_results.json
 ground_truth.json
 test_predictions.csv
 dump/
+archive/
+QA_viva_QA.txt
+REBUILD_TRIGGER.txt
 
 # Generated outputs / evidence
 outputs/annotated/
