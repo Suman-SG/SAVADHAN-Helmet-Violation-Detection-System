@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SAVADHAN | AI-Powered Helmet Detection & Violation Monitoring System{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles_premium.css') }}">
+</head>
+<body>
+  <div class="page-background"></div>
+  <header class="topbar">
+    <div class="brand-row">
+      <div class="brand-mark compact">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="SAVADHAN" class="brand-logo">
+        <div class="brand-copy">
+          <div class="brand-title">SAVADHAN</div>
+        </div>
+      </div>
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="topnav">☰</button>
+    </div>
+    <nav class="topnav" id="topnav">
+      <a href="{{ url_for('landing') }}">Home</a>
+      <a href="{{ url_for('user_dashboard') }}">User Demo</a>
+      <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+      {% if is_admin %}
+      <a class="pill pill-success" href="{{ url_for('admin_logout') }}">Logout</a>
+      {% elif is_user %}
+      <span class="pill pill-soft">User Mode</span>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="shell">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <section class="flash-stack">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </section>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <span>Built for live demos, ngrok sharing, and responsive deployment previews.</span>
+    <span>Local admin: admin / 2006. Override in .env before deployment.</span>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+  <!-- Confirmation modal for admin actions -->
+  <div id="confirm-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <h3 id="confirm-modal-title">Confirm action</h3>
+      <p id="confirm-modal-body">Are you sure?</p>
+      <div class="modal-actions">
+        <button id="confirm-modal-cancel" class="btn btn-ghost">Cancel</button>
+        <button id="confirm-modal-confirm" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+</body>
+</html>

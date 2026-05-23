@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}User Demo | SAVADHAN{% endblock %}
+{% block content %}
+<section class="user-hero card-glow">
+  <div class="user-hero-copy">
+    <div class="hero-ribbon">User workspace</div>
+    <div class="eyebrow">Fast detection studio</div>
+    <h1>Upload, capture, or record a rider and review the result instantly.</h1>
+    <p>
+      This space is for detection only. You get live previews, camera capture, recording, annotated outputs,
+      and a clean summary of safe riders, violations, plates, and email status.
+    </p>
+    <div class="feature-badges user-badges">
+      <span>Instant image preview</span>
+      <span>Video frame processing</span>
+      <span>Annotated results</span>
+      <span>Cooldown aware</span>
+    </div>
+  </div>
+
+  <div class="user-hero-metrics">
+    <div class="metric-tile">
+      <span>Violations today</span>
+      <strong>{{ public_stats.today_violations }}</strong>
+    </div>
+    <div class="metric-tile">
+      <span>Known vehicles</span>
+      <strong>{{ public_stats.registered_vehicles }}</strong>
+    </div>
+    <div class="metric-tile accent">
+      <span>Emails sent</span>
+      <strong>{{ public_stats.emails_sent }}</strong>
+    </div>
+  </div>
+</section>
+
+<!-- Progress Bar -->
+<div id="progress-bar" class="progress-bar"></div>
+
+<section class="user-workspace">
+  <article class="card-surface form-card user-stage">
+    <div class="section-label">Camera</div>
+    <div class="camera-panel">
+      <div class="camera-actions">
+        <button id="open-camera-photo" class="btn btn-outline">Open camera (photo)</button>
+        <button id="open-camera-video" class="btn btn-outline">Open camera (live video)</button>
+        <button id="close-camera" class="btn btn-ghost" style="display:none">Close</button>
+      </div>
+      <div class="camera-view" id="camera-container" style="display:none">
+        <video id="camera-stream" autoplay muted playsinline class="camera-video"></video>
+        <canvas id="camera-canvas" class="camera-canvas" style="display:none"></canvas>
+        <div class="camera-controls" id="camera-controls" style="display:none">
+          <button id="capture-photo" class="btn btn-primary">Capture Photo</button>
+          <button id="start-record" class="btn btn-secondary">Start Recording</button>
+          <button id="stop-record" class="btn btn-danger" style="display:none">Stop Recording</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Image detection</div>
+    <div class="stage-header">
+      <h2>Drop a bike image and inspect the result set.</h2>
+      <p>Preview first, then run detection. The output will show the annotated image, plate, and email state.</p>
+    </div>
+    <form id="image-form" class="upload-form" enctype="multipart/form-data" data-endpoint="{{ url_for('api_process_image') }}">
+      <label class="file-drop" id="image-drop">
+        <input type="file" name="media" accept="image/*" required>
+        <span>📷 Choose an image or drag one here.</span>
+      </label>
+
+      <div id="image-preview-container" class="preview-container preview-panel" style="display: none;">
+        <img id="image-preview" class="preview-image" alt="Selected image">
+        <div class="preview-info">
+          <small id="preview-name"></small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="image-submit">Run Image Detection</button>
+      </div>
+    </form>
+    <div id="image-result" class="result-panel empty-state result-shell">
+      Upload a file to see helmet, plate, and email results.
+    </div>
+  </article>
+
+  <article class="card-surface form-card user-stage">
+    <div class="section-label">Video detection</div>
+    <div class="stage-header">
+      <h2>Process a clip with clean frame sampling.</h2>
+      <p>Video processing is optimized for speed, with a visible progress bar and frame summaries once it completes.</p>
+    </div>
+    <form id="video-form" class="upload-form" enctype="multipart/form-data" data-endpoint="{{ url_for('api_process_video') }}">
+      <label class="file-drop" id="video-drop">
+        <input type="file" name="media" accept="video/*" required>
+        <span>🎥 Choose a video clip.</span>
+      </label>
+
+      <div id="video-preview-container" class="preview-container preview-panel" style="display: none;">
+        <div class="preview-info">
+          <small id="video-preview-name"></small>
+        </div>
+      </div>
+
+      <div class="slider-grid slider-grid-compact">
+        <label>
+          <span>Process every Nth frame</span>
+          <input type="range" name="frame_stride" min="5" max="60" value="20" oninput="this.nextElementSibling.textContent = this.value">
+          <small>20</small>
+        </label>
+        <label>
+          <span>Max frames to process</span>
+          <input type="range" name="max_frames" min="5" max="120" value="40" oninput="this.nextElementSibling.textContent = this.value">
+          <small>40</small>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-secondary" id="video-submit">Run Video Detection</button>
+      </div>
+    </form>
+    <div id="video-result" class="result-panel empty-state result-shell">
+      Video output will appear here after processing.
+    </div>
+  </article>
+</section>
+{% endblock %}

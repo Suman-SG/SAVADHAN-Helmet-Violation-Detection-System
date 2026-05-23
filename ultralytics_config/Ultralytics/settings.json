@@ -1,0 +1,21 @@
+{
+  "settings_version": "0.0.6",
+  "datasets_dir": "C:\\Users\\shonu\\Desktop\\datasets",
+  "weights_dir": "C:\\Users\\shonu\\Desktop\\helmet_system\\weights",
+  "runs_dir": "C:\\Users\\shonu\\Desktop\\helmet_system\\runs",
+  "uuid": "9ee81deda39ec5244c2b38133f4910dd50efe21673533c85b55bb1f4e396e8ca",
+  "sync": true,
+  "api_key": "",
+  "openai_api_key": "",
+  "clearml": true,
+  "comet": true,
+  "dvc": true,
+  "hub": true,
+  "mlflow": true,
+  "neptune": true,
+  "raytune": true,
+  "tensorboard": false,
+  "wandb": false,
+  "vscode_msg": true,
+  "openvino_msg": true
+}

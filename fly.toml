@@ -1,0 +1,11 @@
+[app]
+  # application name (used by flyctl when present)
+  # for deployment we also set `app = "helmet-system"` at top-level
+
+app = "helmet-system"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"

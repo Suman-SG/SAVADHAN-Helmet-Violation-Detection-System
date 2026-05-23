@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Home | SAVADHAN{% endblock %}
+{% block content %}
+<section class="landing-hero">
+  <div class="hero-copy card-glow premium-hero">
+    <div class="hero-ribbon">SAVADHAN platform</div>
+    <div class="eyebrow">AI-powered traffic safety demo</div>
+    <h1>Stylish, responsive monitoring for helmets, plates, and review workflows.</h1>
+    <p class="lead">SAVADHAN brings together image and video detection, evidence review, admin verification, and email-ready violation handling in one polished interface.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Open user demo</a>
+      <a class="btn btn-secondary" href="{{ url_for('admin_login') }}">Admin login</a>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-chip"><span>Total violations</span><strong>{{ public_stats.total_violations }}</strong></div>
+      <div class="stat-chip"><span>Today</span><strong>{{ public_stats.today_violations }}</strong></div>
+      <div class="stat-chip"><span>Emails sent</span><strong>{{ public_stats.emails_sent }}</strong></div>
+      <div class="stat-chip"><span>Registered vehicles</span><strong>{{ public_stats.registered_vehicles }}</strong></div>
+    </div>
+  </div>
+
+  <div class="hero-visual card-surface">
+    <div class="section-label">What it handles</div>
+    <div class="hero-orbit hero-orbit-branded">
+      <div class="orbit-core">
+        <span>SAVADHAN</span>
+        <strong>{{ public_stats.total_violations }}</strong>
+      </div>
+      <div class="orbit-card orbit-top">
+        <span>Today's cases</span>
+        <strong>{{ public_stats.today_violations }}</strong>
+      </div>
+      <div class="orbit-card orbit-right">
+        <span>Delivery status</span>
+        <strong>{{ public_stats.emails_sent }}</strong>
+      </div>
+      <div class="orbit-card orbit-bottom">
+        <span>Vehicle records</span>
+        <strong>{{ public_stats.registered_vehicles }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-panel card-surface premium-panel">
+    <div class="section-label">Why this feels better</div>
+    <div class="feature-grid">
+      <article>
+        <h3>Clear user flow</h3>
+        <p>Open the user page, upload or capture media, and get a clean result summary.</p>
+      </article>
+      <article>
+        <h3>Admin verification</h3>
+        <p>Review violations, confirm or reject, and trigger the email path when needed.</p>
+      </article>
+      <article>
+        <h3>Responsive design</h3>
+        <p>Layouts adapt across desktop and mobile so the same demo looks consistent everywhere.</p>
+      </article>
+      <article>
+        <h3>Demo ready</h3>
+        <p>Works with ngrok sharing and local deployment without removing any existing features.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

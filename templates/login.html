@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Admin Login | SAVADHAN{% endblock %}
+{% block content %}
+<section class="auth-shell auth-shell-wide">
+  <div class="auth-hero card-glow">
+    <div class="eyebrow">Admin access</div>
+    <h1>Command center for violations, cooldowns, and vehicle records.</h1>
+    <p>
+      This dashboard is for managing the SQL data, running test emails, and checking cooldowns.
+      For the local demo, use username <strong>admin</strong> and password <strong>2006</strong>.
+    </p>
+    <div class="auth-points">
+      <div>Live cooldown tracking</div>
+      <div>Database control</div>
+      <div>SMTP test panel</div>
+      <div>Vehicle registration</div>
+    </div>
+  </div>
+
+  <div class="auth-card card-surface">
+    <div class="eyebrow">Admin sign in</div>
+    <h1>Enter the control panel</h1>
+    <p>Use the local demo credentials below. Change them in <span class="inline-code">.env</span> before deployment.</p>
+    <form method="post" class="auth-form auth-form-compact">
+      <label>
+        <span>Username</span>
+        <input type="text" name="username" value="admin" placeholder="admin" required>
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" placeholder="2006" required>
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+    <div class="auth-footnote">Tip: if you still see invalid credentials, restart <span class="inline-code">python web_app.py</span> after editing <span class="inline-code">.env</span>.</div>
+  </div>
+</section>
+{% endblock %}

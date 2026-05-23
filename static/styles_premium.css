@@ -1,0 +1,62 @@
+/* Premium overrides and micro-animations */
+:root{
+  --logo-size:48px;
+}
+
+.brand-mark{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:6px 10px;
+  border-radius:12px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.brand-logo{
+  width:var(--logo-size);
+  height:var(--logo-size);
+  display:block;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45));
+  transform-origin:center;
+  transition: transform 0.45s cubic-bezier(.2,.9,.2,1), filter 0.35s;
+}
+
+.brand-mark:hover .brand-logo{
+  transform: translateY(-4px) rotate(-6deg) scale(1.02);
+  filter: drop-shadow(0 16px 36px rgba(0,229,255,0.14));
+}
+
+.brand-title{
+  font-family: 'Manrope', 'Space Grotesk', sans-serif;
+  font-weight:800;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  font-size: 1.12rem;
+  margin-left:4px;
+}
+
+.topbar{
+  background: linear-gradient(180deg, rgba(10,14,39,0.9), rgba(8,14,28,0.82));
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+/* subtle floating for hero headline */
+.landing-hero .premium-hero h1{
+  animation: floatText 6s ease-in-out infinite;
+}
+@keyframes floatText{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+}
+
+/* make action buttons slightly larger and glassy */
+.btn-primary{ box-shadow: 0 8px 30px rgba(0,229,255,0.08); }
+.btn-secondary{ box-shadow: 0 8px 30px rgba(255,107,157,0.06); }
+
+/* compact mobile header */
+@media (max-width:768px){
+  .brand-title{ font-size:1rem; }
+  .brand-subtitle{ display:none; }
+}

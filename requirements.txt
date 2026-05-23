@@ -1,0 +1,22 @@
+numpy
+opencv-python
+ultralytics
+torch
+torchvision
+easyocr
+pytesseract
+python-dotenv
+reportlab
+matplotlib
+Pillow
+pandas
+streamlit
+Flask
+waitress
+gunicorn
+gradio
+pyngrok
+
+# Notes:
+# - Windows OCR still needs the Tesseract app installed separately.
+# - If torch installation fails on your machine, install the matching CPU/GPU build from the PyTorch website first.

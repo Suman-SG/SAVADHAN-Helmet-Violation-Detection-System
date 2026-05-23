@@ -1,0 +1,18 @@
+gradio>=5.0.0
+numpy
+opencv-python-headless
+Pillow
+python-dotenv
+torch
+torchvision
+ultralytics
+easyocr
+pytesseract
+reportlab
+matplotlib
+pandas
+Flask
+
+# Spaces note:
+# - Use this file for Hugging Face Spaces.
+# - If the full torch/ultralytics stack is too heavy for your Space, swap to lighter weights or host the weights externally.

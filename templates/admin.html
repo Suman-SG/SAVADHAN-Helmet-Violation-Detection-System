@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard | SAVADHAN{% endblock %}
+{% block content %}
+<section class="admin-hero card-glow">
+  <div class="admin-hero-copy">
+    <div class="eyebrow">Admin mode</div>
+    <h1>Command center for violations, vehicles, and cooldown enforcement.</h1>
+    <p>
+      A focused operations surface for managing the full pipeline: inspect violations, register vehicles,
+      send SMTP tests, and verify cooldown protection before a second email is triggered.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('user_dashboard') }}">Open user view</a>
+      <a class="btn btn-secondary" href="{{ url_for('landing') }}">Back to home</a>
+      <a class="btn btn-danger" href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+  </div>
+
+  <div class="admin-hero-stats">
+    <div class="admin-stat accent">
+      <span>Total violations</span>
+      <strong>{{ admin_stats.total_violations }}</strong>
+      <small>All time</small>
+    </div>
+    <div class="admin-stat">
+      <span>Today</span>
+      <strong>{{ admin_stats.today_violations }}</strong>
+      <small>Fresh events</small>
+    </div>
+    <div class="admin-stat">
+      <span>Registered</span>
+      <strong>{{ admin_stats.registered_vehicles }}</strong>
+      <small>Active vehicles</small>
+    </div>
+    <div class="admin-stat success">
+      <span>Email sent</span>
+      <strong>{{ admin_stats.emails_sent }}</strong>
+      <small>Notifications</small>
+    </div>
+  </div>
+</section>
+
+<section class="admin-strip card-surface">
+  <div>
+    <span class="section-label">Operations overview</span>
+    <h2>One place to track violations, cooldowns, and evidence.</h2>
+  </div>
+  <div class="auth-points admin-points">
+    <div>Cooldown queue: {{ cooldowns|length }}</div>
+    <div>Recent rows: {{ recent_violations|length }}</div>
+    <div>Vehicle records: {{ vehicles|length }}</div>
+    <div>SMTP ready: {{ 'Yes' if settings.send_email else 'No' }}</div>
+  </div>
+</section>
+
+<section class="stats-row">
+  <article class="card-surface stat-card">
+    <span class="stat-label">Cooldown plates</span>
+    <strong>{{ cooldowns|length }}</strong>
+    <p>Plates with a recent email in the last 12 hours.</p>
+  </article>
+  <article class="card-surface stat-card">
+    <span class="stat-label">Recent violations</span>
+    <strong>{{ recent_violations|length }}</strong>
+    <p>Latest rows pulled from the SQL database.</p>
+  </article>
+  <article class="card-surface stat-card">
+    <span class="stat-label">Vehicle records</span>
+    <strong>{{ vehicles|length }}</strong>
+    <p>Active registrations available to the detector.</p>
+  </article>
+</section>
+
+<section class="admin-grid">
+  <article class="card-surface table-card">
+    <div class="section-label">Cooldown monitor</div>
+    {% if cooldowns %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Plate</th>
+            <th>Last sent</th>
+            <th>Hours remaining</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in cooldowns %}
+          <tr>
+            <td>{{ row.plate_number }}</td>
+            <td>{{ row.last_sent }}</td>
+            <td>{{ row.hours_remaining }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">No active cooldowns right now.</div>
+    {% endif %}
+  </article>
+
+  <article class="card-surface table-card">
+    <div class="section-label">Recent violations</div>
+    {% if recent_violations %}
+    <div class="table-wrap scrollable">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Plate</th>
+            <th>Owner</th>
+            <th>Violation</th>
+            <th>Fine</th>
+            <th>Email</th>
+            <th>Invoice</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in recent_violations %}
+          <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.plate_number }}</td>
+            <td>{{ row.owner_name }}</td>
+            <td>{{ row.violation_type }}</td>
+            <td>{{ row.fine_amount }}</td>
+            <td>{{ 'Yes' if row.email_sent else 'No' }}</td>
+            <td>{{ row.invoice_number }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-small btn-success verify-violation" data-id="{{ row.id }}" data-action="confirm">✔ Confirm</button>
+                <button class="btn btn-small btn-danger verify-violation" data-id="{{ row.id }}" data-action="reject">✖ Reject</button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">No violations stored yet.</div>
+    {% endif %}
+  </article>
+</section>
+
+<section class="admin-grid two-up">
+  <article class="card-surface form-card">
+    <div class="section-label">Settings</div>
+    <form method="post" action="{{ url_for('admin_settings') }}" class="stack-form">
+      <label>
+        <span>Helmet confidence</span>
+        <input type="number" step="0.01" min="0.05" max="0.95" name="helmet_conf" value="{{ settings.helmet_conf }}">
+      </label>
+      <label>
+        <span>Plate confidence</span>
+        <input type="number" step="0.01" min="0.05" max="0.95" name="plate_conf" value="{{ settings.plate_conf }}">
+      </label>
+      <label>
+        <span>Fine amount</span>
+        <input type="number" step="1" min="100" max="50000" name="fine_amount" value="{{ settings.fine_amount }}">
+      </label>
+      <label class="toggle-row">
+        <input type="checkbox" name="send_email" {% if settings.send_email %}checked{% endif %}>
+        <span>Enable email sending</span>
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save settings</button>
+      </div>
+    </form>
+  </article>
+
+  <article class="card-surface form-card">
+    <div class="section-label">SMTP test</div>
+    <form method="post" action="{{ url_for('admin_smtp_test') }}" class="stack-form">
+      <label>
+        <span>Recipient email</span>
+        <input type="email" name="recipient_email" value="{{ test_email }}" placeholder="test@example.com">
+      </label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-secondary">Send test email</button>
+      </div>
+    </form>
+  </article>
+</section>
+
+<section class="admin-grid two-up">
+  <article class="card-surface form-card">
+    <div class="section-label">Vehicle registration</div>
+    <form method="post" action="{{ url_for('admin_vehicle_save') }}" class="stack-form">
+      <label><span>Plate number</span><input type="text" name="plate_number" placeholder="TN72P2931" required></label>
+      <label><span>Owner name</span><input type="text" name="owner_name" placeholder="Owner name" required></label>
+      <label><span>Owner email</span><input type="email" name="owner_email" placeholder="owner@example.com" required></label>
+      <label><span>Phone</span><input type="text" name="phone" placeholder="Phone number"></label>
+      <label><span>Address</span><input type="text" name="address" placeholder="Address"></label>
+      <label><span>Vehicle model</span><input type="text" name="vehicle_model" placeholder="Scooter / bike model"></label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save vehicle</button>
+      </div>
+    </form>
+  </article>
+
+  <article class="card-surface form-card">
+    <div class="section-label">Deactivate vehicle</div>
+    <form method="post" action="{{ url_for('admin_vehicle_deactivate') }}" class="stack-form">
+      <label><span>Plate number</span><input type="text" name="plate_number" placeholder="TN72P2931"></label>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-danger">Deactivate</button>
+      </div>
+    </form>
+  </article>
+</section>
+
+<section class="card-surface table-card">
+  <div class="section-label">Registered vehicles</div>
+  {% if vehicles %}
+  <div class="table-wrap scrollable">
+    <table>
+      <thead>
+        <tr>
+          <th>Plate</th>
+          <th>Owner</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Model</th>
+          <th>Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in vehicles %}
+        <tr>
+          <td>{{ row.plate_number }}</td>
+          <td>{{ row.owner_name }}</td>
+          <td>{{ row.owner_email }}</td>
+          <td>{{ row.phone }}</td>
+          <td>{{ row.address }}</td>
+          <td>{{ row.vehicle_model }}</td>
+          <td>{{ 'Yes' if row.is_active else 'No' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No registered vehicles found.</div>
+  {% endif %}
+</section>
+{% endblock %}

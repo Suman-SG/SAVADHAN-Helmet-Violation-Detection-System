@@ -1,0 +1,44 @@
+# Environment
+venv/
+.env
+.env.*
+!.env.example
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Git metadata / local repos
+.git/
+
+# Generated / bulky artifacts
+outputs/
+database/traffic.db
+*.db
+*.sqlite3
+*.sqlite
+
+# Local docs / generated reports
+*.docx
+benchmark_results.json
+ground_truth.json
+test_predictions.csv
+dump/
+
+# Generated outputs / evidence
+outputs/annotated/
+outputs/evidence/
+
+# Invoices and generated PDFs
+invoices/
+
+# allow placeholder READMEs to be committed
+!invoices/README.md
+!outputs/README.md
+!database/README.md
+
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
